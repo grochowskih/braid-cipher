@@ -1,4 +1,4 @@
-def substitution(state, sbox_a, sbox_b):
+def Substitution(state, sbox_a, sbox_b):
     s = list(state)
     for i in range(0, 6):
         current_a = sbox_a[int(''.join(state[4 * i: 4 * i + 4]), 2)]

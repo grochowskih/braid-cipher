@@ -1,13 +1,20 @@
-def key_schedule(key, d):
-    keys = [key] + [0]*12
+s_box_1=[2,12,4,1,7,10,11,6,8,5,3,15,13,0,14,9]
+
+def KeySchedule(key):
+    key_tmp = int(key, 2)
+    keys = [key_tmp] + [0]*12
     r = [1]
     for i in range(2, 14):
         r.append(2*r[i-2] ^ int("7d", 16))
         rc = int("".join([bin(r[i-1])[2:]] + ["00"*16]*5), 2)
-        keys[i-1] = keys[i-2] ^ (rc >> (2*i))
+        if i != 2:
+            keys[i-1] = int(keys[i-2], 2) ^ (rc >> (2*i))
+        else:
+            keys[i-1] = keys[i-2] ^ (rc >> (2*i))
+        keys = list("".join(["{0:04b}".format(el) for el in keys]))
         for j in range(12):
-            keys[4*j : 4*j + 3] = s_box_1(int(keys[4*j : 4*j + 3], 2))
-    return keys
+            keys[4*j : 4*j + 4] = "{0:04b}".format(s_box_1[int("".join(keys[4*j : 4*j + 4]), 2)])
+    return "".join(keys)
 
 def AddRoundKey(S,Kr):
     return bin(int(S)^int(Kr))[2:]
